@@ -20,48 +20,38 @@ helloworld.start = function(){
 	var director = new lime.Director(document.body,1024,768),
 	    scene = new lime.Scene(),
 
-	    target = new lime.Layer().setPosition(512,384),
-        circle = new lime.Circle().setSize(150,150).setFill(255,150,0),
-        lbl = new lime.Label().setSize(160,50).setFontSize(30).setText('TOUCH ME!'),
-        title = new lime.Label().setSize(800,120).setFontSize(60).setText('OH YEAH BABY THAT FEELS GOOD!')
-            .setOpacity(0).setPosition(512,80).setFontColor('#999').setFill(200,100,0,.1);
+	    player = new lime.Layer().setPosition(512,384),
+            circle = new lime.Circle().setSize(50,50).setFill(0,0,0),
 
+            target = new lime.Layer().setPosition(768, 512),
+            tcircle = new lime.Circle().setSize(50,50).setFill(43,237,82);
+    //add circles to their requisite layers
+    player.appendChild(circle);
+    target.appendChild(tcircle);
 
-    //add circle and label to target object
-    target.appendChild(circle);
-    target.appendChild(lbl);
+    //add the player to the scene
+    scene.appendChild(player);
 
-    //add target and title to the scene
+    //add target to scene
     scene.appendChild(target);
-    scene.appendChild(title);
 
 	director.makeMobileWebAppCapable();
 
     //add some interaction
-    goog.events.listen(target,['mousedown','touchstart'],function(e){
+    goog.events.listen(player,['mousedown','touchstart'],function(e){
 
-        //animate
-        target.runAction(new lime.animation.Spawn(
-            new lime.animation.FadeTo(.5).setDuration(.2),
-            new lime.animation.ScaleTo(1.5).setDuration(.8)
-        ));
-
-        title.runAction(new lime.animation.FadeTo(1));
-
-        //let target follow the mouse/finger
+        //let player follow the mouse/finger
         e.startDrag();
 
         //listen for end event
         e.swallow(['mouseup','touchend'],function(){
-            target.runAction(new lime.animation.Spawn(
+            player.runAction(new lime.animation.Spawn(
                 new lime.animation.FadeTo(1),
                 new lime.animation.ScaleTo(1),
                 new lime.animation.MoveTo(512,384)
             ));
 
-            title.runAction(new lime.animation.FadeTo(0));
         });
-
 
     });
 
